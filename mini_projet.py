@@ -1,3 +1,5 @@
+from math import *
+
 dic = {
     'Marseille': {
     'Nîmes' : 122,
@@ -134,7 +136,32 @@ def theGODfunction(vroomvroom):
     return temps_distance_fait
 
 
+def minutes_en_heure(temps_distance_fait):
+    temps = temps_distance_fait[0]
+    heure = temps / 60
+    minutes = temps % 60
+    arrondHeure = floor(heure)
+    arrondMinutes = ceil(minutes)
+    temps_around = [arrondHeure, arrondMinutes]
+    return temps_around
+
+def addtime(temps_distance_fait):
+    temps = temps_distance_fait[0] + 45
+    lereturn = [temps, 0]
+    return lereturn
+
+def tempstotal(temps_minutes1, temps_minutes2, temps_minutes3):
+    temps1 = temps_minutes1[0]
+    temps2 = temps_minutes2[0]
+    temps3 = temps_minutes3[0]
+
+    finaltemps = temps1 + temps2 + temps3
+    tabfinaltemps = [finaltemps, 0]
+    izi = minutes_en_heure(tabfinaltemps)
+    return izi
+
 nbvilles = input('Combien de livraison ton camion doit-il faire ? Une, deux ou trois ? (Marque ton chiffre sous le format numérique): ')
+print('Les villes disponible sont: Marseille, Nîmes, Ajaccio, Paris, Perpignan, Annecy, Besançon, Toulouse, Toulon.')
 
 
 if nbvilles == '1':
@@ -146,10 +173,12 @@ if nbvilles == '1':
         nbkil = dic[ville1][ville2]
 
     result = theGODfunction(nbkil)
+    theend = minutes_en_heure(result)
+    km = floor(result[1])
     print('Vôtre ville de départ est ' + ville1)
     print('Vôtre ville de d\'arriver est ' + ville2)
-    print('Vous avez parcouru la distance de ' + str(result[1]) + ' Km')
-    print('Ce trajet vous à pris ' + str(result[0]) + ' Minutes')
+    print('Vous avez parcouru la distance de ' + str(km) + ' Km.')
+    print('Ce trajet vous à pris ' + str(theend[0]) + ' Heures et ' + str(theend[1]) +' Minutes.')
 
 elif nbvilles == '2':
     ville1 = input('Ville de départ: ')
@@ -160,10 +189,38 @@ elif nbvilles == '2':
         nbkil = dic[ville2][ville1]
     except KeyError:
         nbkil = dic[ville1][ville2]
+
+    result = theGODfunction(nbkil)
+    idk = addtime(result)
+    km = floor(result[1])
+
     try:
-        nbkil = dic[ville2][ville3]
+        nbkil1 = dic[ville2][ville3]
     except KeyError:
-        nbkil = dic[ville3][ville2]
+        nbkil1 = dic[ville3][ville2]
+
+    result1 = theGODfunction(nbkil1)
+    idk1 = addtime(result1)
+    km1 = floor(result1[1])
+    untab = [0,0]
+
+    finalkm = km + km1
+    temps_final = tempstotal(idk, idk1, untab)
+
+    theend = minutes_en_heure(idk)
+    theend1 = minutes_en_heure(idk1)
+
+    print('---------------------------------------------------------------------------------------------------')
+    print('Votre ville de départ est: ' + ville1)
+    print('Vôtre ville pour votre première livraison est: ' + ville2)
+    print('Vôtre ville de d\'arriver est ' + ville3)
+    print('---------------------------------------------------------------------------------------------------')
+    print('De '+ ville1 + ' a ' + ville2 + ' vous avez parcouru la distance de ' + str(km) + ' Km en ' + str(theend[0]) + ' Heures et ' + str(theend[1]) +' Minutes. Et le camion c\'est arreter 45 minutes en plus.')
+    print('De '+ ville2 + ' a ' + ville3 + ' vous avez parcouru la distance de ' + str(km1) + ' Km en '+ str(theend1[0]) + ' Heures et ' + str(theend1[1]) +' Minutes. Et le camion c\'est arreter 45 minutes en plus.')
+    print('---------------------------------------------------------------------------------------------------')
+    print('La distance total parcourue est de: ' + str(finalkm) + 'km')
+    print('Le temps total est de: ' + str(temps_final[0]) + ' Heures et ' + str(temps_final[1]) + ' minutes.')
+
     
 elif nbvilles == '3':
     ville1 = input('Ville de départ: ')
@@ -176,23 +233,45 @@ elif nbvilles == '3':
     except KeyError:
         nbkil = dic[ville1][ville2]
     result = theGODfunction(nbkil)
-    print('Vous avez parcouru la distance de ' + str(result[1]) + ' Km')
+    idk = addtime(result)
+    km = floor(result[1])
 
     try:
-        nbkil = dic[ville2][ville3]
+        nbkil1 = dic[ville2][ville3]
     except KeyError:
-        nbkil = dic[ville3][ville2]
-    result = theGODfunction(nbkil)
-    print('Vous avez parcouru la distance de ' + str(result[1]) + ' Km')
+        nbkil1 = dic[ville3][ville2]
+    result1 = theGODfunction(nbkil1)
+    idk1 = addtime(result1)
+    km1 = floor(result1[1])
 
 
     try:
-        nbkil = dic[ville4][ville3]
+        nbkil2 = dic[ville4][ville3]
     except KeyError:
-        nbkil = dic[ville3][ville4]
-    result = theGODfunction(nbkil)
-    print('Vous avez parcouru la distance de ' + str(result[1]) + ' Km')
+        nbkil2 = dic[ville3][ville4]
+    result2 = theGODfunction(nbkil2)
+    idk2 = addtime(result2)
+    km2 = floor(result2[1])
+    finalkm = km + km1 + km2
 
+    temps_final = tempstotal(idk, idk1, idk2)
+
+    theend = minutes_en_heure(idk)
+    theend1 = minutes_en_heure(idk1)
+    theend2 = minutes_en_heure(idk2)
+
+    print('---------------------------------------------------------------------------------------------------')
+    print('Votre ville de départ est: ' + ville1)
+    print('Vôtre ville pour votre première livraison est: ' + ville2)
+    print('Vôtre ville pour votre deuxieme livraison est: ' + ville3)
+    print('Vôtre ville de d\'arriver est ' + ville4)
+    print('---------------------------------------------------------------------------------------------------')
+    print('De '+ ville1 + ' a ' + ville2 + ' vous avez parcouru la distance de ' + str(km) + ' Km en ' + str(theend[0]) + ' Heures et ' + str(theend[1]) +' Minutes. Et le camion c\'est arreter 45 minutes en plus.')
+    print('De '+ ville2 + ' a ' + ville3 + ' vous avez parcouru la distance de ' + str(km1) + ' Km en '+ str(theend1[0]) + ' Heures et ' + str(theend1[1]) +' Minutes. Et le camion c\'est arreter 45 minutes en plus.')
+    print('De '+ ville3 + ' a ' + ville4 + ' vous avez parcouru la distance de ' + str(km2) + ' Km en ' + str(theend2[0]) + ' Heures et ' + str(theend2[1]) +' Minutes. Et le camion c\'est arreter 45 minutes en plus.')
+    print('---------------------------------------------------------------------------------------------------')
+    print('La distance total parcourue est de: ' + str(finalkm) + 'km')
+    print('Le temps total est de: ' + str(temps_final[0]) + ' Heures et ' + str(temps_final[1]) + ' minutes.')
 
 else:
     print('Tu tes trompé dans tes valeurs !')
